@@ -31,7 +31,9 @@ class decline_curve:
     def average_sample(self, window, stream, lookback=None):
         vals_clean = self.streams[stream]["vals_clean"]
         roll = (
-            vals_clean.rolling(window, center=True, win_type="triang").mean().dropna()
+            vals_clean.rolling(window, center=True, win_type="triang")
+            .mean()
+            .dropna()
         )
         roll = roll.interpolate()
         roll_dt = roll.diff().dropna()
@@ -58,9 +60,13 @@ class decline_curve:
         elif stream == "owr":
             vals = self.prodinj["oil"] / self.prodinj["water"]
         elif stream == "oilcut":
-            vals = self.prodinj["oil"] / (self.prodinj["oil"] + self.prodinj["water"])
+            vals = self.prodinj["oil"] / (
+                self.prodinj["oil"] + self.prodinj["water"]
+            )
         elif stream == "oilcut_gas":
-            vals = self.prodinj["oil"] / (self.prodinj["oil"] + self.prodinj["gas"])
+            vals = self.prodinj["oil"] / (
+                self.prodinj["oil"] + self.prodinj["gas"]
+            )
         else:
             vals = (self.prodinj[stream]) / 30.45
         vals.index = vals.index.astype(int)
@@ -70,7 +76,9 @@ class decline_curve:
         p01 = vals.quantile(0.01)
         p99 = vals.quantile(0.99)
         vals_clean.loc[(vals_clean > p99) | (vals_clean < p01)] = pd.np.nan
-        vals_outliers.loc[(vals_outliers < p99) & (vals_outliers > p01)] = pd.np.nan
+        vals_outliers.loc[
+            (vals_outliers < p99) & (vals_outliers > p01)
+        ] = pd.np.nan
         self.streams[stream]["vals_clean"] = vals_clean
         self.streams[stream]["vals_outliers"] = vals_outliers
         vals_clean = vals_clean.dropna()
@@ -85,7 +93,9 @@ class decline_curve:
     def decline_sample(self, window, stream, lookback=None):
         vals_clean = self.streams[stream]["vals_clean"]
         roll = (
-            vals_clean.rolling(window, center=True, win_type="triang").mean().dropna()
+            vals_clean.rolling(window, center=True, win_type="triang")
+            .mean()
+            .dropna()
         )
         roll = roll.interpolate()
         roll_dt = roll.diff().dropna()
@@ -196,7 +206,9 @@ class decline_curve:
     def plot_decline(self, stream, yaxis=None):
         try:
             vals_outliers = self.streams[stream]["vals_outliers"]
-            plt.scatter(vals_outliers.index, vals_outliers.values, color="green")
+            plt.scatter(
+                vals_outliers.index, vals_outliers.values, color="green"
+            )
         except Exception:
             pass
         try:
@@ -211,7 +223,9 @@ class decline_curve:
             pass
         try:
             params = self.streams[stream]["params"]
-            x = np.array(range(int(len(vals_clean) - params["lookback"] + (12 * 6))))
+            x = np.array(
+                range(int(len(vals_clean) - params["lookback"] + (12 * 6)))
+            )
             plt.scatter(
                 x + params["lookback"],
                 self.model_func(x, params["qi"], params["d"], params["b"]),
@@ -228,7 +242,9 @@ class decline_curve:
         try:
             vals_clean = self.streams[stream]["vals_clean"]
             plt.scatter(
-                vals_clean.cumsum().values, vals_clean.values, color="darkgreen",
+                vals_clean.cumsum().values,
+                vals_clean.values,
+                color="darkgreen",
             )
             plt.grid(True)
             plt.show()
@@ -291,7 +307,9 @@ class decline_curve:
         for dict_value in params.keys():
             for v in params[dict_value]:
                 try:
-                    params[dict_value][v] = float(round(params[dict_value][v], 3))
+                    params[dict_value][v] = float(
+                        round(params[dict_value][v], 3)
+                    )
                 except Exception:
                     pass
                 if isinstance(v, np.bool_):
