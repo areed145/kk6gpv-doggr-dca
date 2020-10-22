@@ -136,7 +136,7 @@ class decline_curve:
             self.streams[stream]["params"]["lookback"]
         ]
 
-    #         except:
+    #         except Exception:
     #             pass
 
     def decline_curve(self, stream, lookback_use=None):
@@ -328,7 +328,7 @@ class decline_curve:
 
     #         try:
 
-    #         except:
+    #         except Exception:
     #             print('failed')
     #             pass
 
