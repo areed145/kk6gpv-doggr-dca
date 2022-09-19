@@ -14,7 +14,7 @@ matplotlib
 mccabe==0.6.1
 numpy==1.19.0
 oauth2==1.9.0.post1
-pandas==1.0.5
+pandas==1.5.0
 plotly
 pylint==2.3.1
 pymongo==3.10.1
